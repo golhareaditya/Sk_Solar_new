@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: sk-solar
+    runtime: python
+    plan: free
+    buildCommand: "bash build.sh"
+    startCommand: "gunicorn sk_solar.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.7
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+      - key: ALLOWED_HOSTS
+        value: sk-solar.onrender.com,.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://*.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sk-solar-db
+          property: connectionString
+
+databases:
+  - name: sk-solar-db
+    plan: free
